@@ -10,51 +10,65 @@
 <body>
     <div class="container">
         <header>
-            <h1>Система анализа успеваемости студентов</h1>
-            <p class="subtitle">Учебная группа - ВМО1</p>
+            <h1>📊 Система анализа успеваемости студентов</h1>
+            <p class="subtitle">Учебная группа - аналитический дашборд (100-балльная система)</p>
         </header>
 
+        <!-- Статистика -->
         <section class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon"></div>
+                <div class="stat-icon">👨‍🎓</div>
                 <div class="stat-value" id="totalStudents">0</div>
                 <div class="stat-label">Всего студентов</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"></div>
+                <div class="stat-icon">📚</div>
                 <div class="stat-value" id="totalDisciplines">0</div>
                 <div class="stat-label">Дисциплин</div>
             </div>
             <div class="stat-card warning">
-                <div class="stat-icon"></div>
+                <div class="stat-icon">⚠️</div>
                 <div class="stat-value" id="atRiskCount">0</div>
                 <div class="stat-label">Группа риска</div>
             </div>
             <div class="stat-card success">
-                <div class="stat-icon"></div>
+                <div class="stat-icon">🏆</div>
                 <div class="stat-value" id="avgRating">0</div>
                 <div class="stat-label">Средний рейтинг</div>
             </div>
         </section>
 
+        <!-- Графики: Рейтинг и Дисциплины -->
         <section class="charts-grid">
             <div class="chart-card">
-                <h2> Распределение рейтинга студентов</h2>
+                <h2>📈 Распределение рейтинга студентов</h2>
                 <canvas id="ratingChart"></canvas>
             </div>
             <div class="chart-card">
-                <h2> Успеваемость по дисциплинам</h2>
+                <h2>📊 Успеваемость по дисциплинам</h2>
                 <canvas id="disciplineChart"></canvas>
             </div>
         </section>
 
+        <!-- График: Участие в проектах (ПО ЦЕНТРУ) -->
+        <section class="project-section">
+            <div class="project-card">
+                <h2>📊 Участие в проектах</h2>
+                <div class="project-chart-wrapper">
+                    <canvas id="projectChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Топ студентов -->
         <section class="top-students">
-            <h2> Топ-3 студентов</h2>
+            <h2>🏆 Топ-3 студентов</h2>
             <div class="top-grid" id="topStudents"></div>
         </section>
 
+        <!-- Таблица рейтинга -->
         <section class="rating-table">
-            <h2> Рейтинг студентов</h2>
+            <h2>📋 Рейтинг студентов</h2>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -65,6 +79,7 @@
                             <th>Ср. оценка</th>
                             <th>Посещаемость</th>
                             <th>Активность</th>
+                            <th>Проекты</th>
                             <th>Рейтинг</th>
                             <th>Статус</th>
                         </tr>
@@ -74,15 +89,16 @@
             </div>
         </section>
 
+        <!-- Группа риска -->
         <section class="at-risk-section">
-            <h2> Студенты в группе риска</h2>
+            <h2>⚠️ Студенты в группе риска (рейтинг &lt; 30)</h2>
             <div id="atRiskList"></div>
         </section>
 
-        <button onclick="location.reload()" class="refresh-btn"> Обновить данные</button>
+        <button onclick="location.reload()" class="refresh-btn">🔄 Обновить данные</button>
 
         <footer>
-            <p> Система анализа успеваемости | Данные обновлены: <span id="updateTime"></span></p>
+            <p>📊 Система анализа успеваемости | Данные обновлены: <span id="updateTime"></span></p>
         </footer>
     </div>
 

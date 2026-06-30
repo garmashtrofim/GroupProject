@@ -13,21 +13,17 @@ def load_and_validate_data(csv_path: str) -> pd.DataFrame:
 
     df = pd.read_csv(csv_path)
 
-    # Проверка наличия всех колонок
     missing_cols = [col for col in required_cols if col not in df.columns]
     if missing_cols:
         raise ValueError(f"Отсутствуют обязательные колонки: {missing_cols}")
 
-    # Преобразование типов
     df['grade'] = pd.to_numeric(df['grade'], errors='coerce')
     df['attendance'] = pd.to_numeric(df['attendance'], errors='coerce')
     df['activity_score'] = pd.to_numeric(df['activity_score'], errors='coerce')
     df['project_participation'] = df['project_participation'].astype(bool)
 
-    # Удаление строк с отсутствующими обязательными значениями
     df = df.dropna(subset=['student_id', 'grade'])
 
-    # Валидация диапазонов (0-100 для всех метрик)
     df = df[(df['grade'] >= 0) & (df['grade'] <= 100)]
     df = df[(df['attendance'] >= 0) & (df['attendance'] <= 100)]
     df = df[(df['activity_score'] >= 0) & (df['activity_score'] <= 100)]
@@ -48,16 +44,13 @@ def calculate_student_rating(df: pd.DataFrame, weights: Optional[Dict[str, float
             'project': 0.15
         }
 
-    # Группировка и расчет средних
     avg_grade = df.groupby('student_id')['grade'].mean().rename('avg_grade')
     avg_attendance = df.groupby('student_id')['attendance'].mean().rename('avg_attendance')
     avg_activity = df.groupby('student_id')['activity_score'].mean().rename('avg_activity')
     project_rate = df.groupby('student_id')['project_participation'].mean().rename('project_rate') * 100
 
-    # Объединение метрик
     metrics = pd.concat([avg_grade, avg_attendance, avg_activity, project_rate], axis=1).reset_index()
 
-    # Min-Max нормализация (0-100)
     for col in ['avg_grade', 'avg_attendance', 'avg_activity', 'project_rate']:
         min_val = metrics[col].min()
         max_val = metrics[col].max()
@@ -66,7 +59,6 @@ def calculate_student_rating(df: pd.DataFrame, weights: Optional[Dict[str, float
         else:
             metrics[col] = 0.0
 
-    # Расчет взвешенного рейтинга
     metrics['rating'] = (
             weights['grade'] * metrics['avg_grade'] +
             weights['attendance'] * metrics['avg_attendance'] +
@@ -74,7 +66,6 @@ def calculate_student_rating(df: pd.DataFrame, weights: Optional[Dict[str, float
             weights['project'] * metrics['project_rate']
     )
 
-    # Добавляем информацию о студенте (имя, группа)
     student_info = df[['student_id', 'name', 'group']].drop_duplicates('student_id')
     result = metrics.merge(student_info, on='student_id', how='left')
 

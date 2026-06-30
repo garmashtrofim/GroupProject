@@ -21,45 +21,36 @@ def main():
     print("=" * 50)
 
     try:
-        # 1. Загрузка конфигурации
         print("\n📂 Загрузка конфигурации...")
         with open('config.json', 'r', encoding='utf-8') as f:
             config = json.load(f)
         print("✅ Конфигурация загружена")
 
-        # 2. Загрузка и валидация данных
         print("\n📊 Загрузка данных...")
         df = load_and_validate_data('students.csv')
 
-        # 3. Расчет рейтинга
         print("\n📈 Расчет рейтинга студентов...")
         rating_df = calculate_student_rating(df, weights=config['weights'])
 
-        # 4. Анализ по дисциплинам
         print("\n📚 Анализ по дисциплинам...")
         discipline_stats = analyze_by_discipline(df)
 
-        # 5. Поиск группы риска
         print("\n⚠️ Поиск студентов в группе риска...")
         at_risk = identify_at_risk_students(
             rating_df,
             threshold=config['risk_threshold']
         )
 
-        # 6. Сохранение результатов в CSV
         print("\n💾 Сохранение результатов...")
 
-        # Создаём папки, если их нет
         os.makedirs('data', exist_ok=True)
 
         rating_df.to_csv(config['output_files']['rating_file'], index=False, encoding='utf-8')
         discipline_stats.to_csv(config['output_files']['discipline_stats_file'], encoding='utf-8')
         at_risk.to_csv(config['output_files']['at_risk_file'], index=False, encoding='utf-8')
 
-        # 7. Подготовка данных для HTML
         print("\n🌐 Подготовка данных для веб-страницы...")
 
-        # Преобразуем данные в JSON для передачи в HTML
         results = {
             'students': rating_df.to_dict('records'),
             'discipline_stats': discipline_stats.reset_index().to_dict('records'),
@@ -72,13 +63,11 @@ def main():
             'weights': config['weights']
         }
 
-        # Сохраняем JSON для HTML
         with open('data/results.json', 'w', encoding='utf-8') as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
 
         print("✅ Данные сохранены в data/results.json")
 
-        # 8. Вывод итоговой статистики
         print("\n" + "=" * 50)
         print("📊 ИТОГОВАЯ СТАТИСТИКА")
         print("=" * 50)
@@ -93,19 +82,15 @@ def main():
         print("=" * 50)
         print("✅ Анализ успешно завершён!")
 
-        # ====== АВТОМАТИЧЕСКОЕ ОТКРЫТИЕ БРАУЗЕРА ======
         print("\n🌐 Открытие веб-страницы...")
 
-        # Функция для открытия браузера с задержкой
         def open_browser():
             time.sleep(1.5)
             webbrowser.open('http://localhost:8000/index.html')
             print("✅ Браузер открыт!")
 
-        # Запускаем открытие браузера в отдельном потоке
         threading.Thread(target=open_browser, daemon=True).start()
 
-        # Запускаем сервер
         print("🚀 Запуск веб-сервера на http://localhost:8000")
         print("   Нажмите Ctrl+C для остановки сервера")
         print("-" * 50)
