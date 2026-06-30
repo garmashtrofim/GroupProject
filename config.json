@@ -1,0 +1,22 @@
+{
+  "weights": {
+    "grade": 0.4,
+    "attendance": 0.25,
+    "activity": 0.2,
+    "project": 0.15
+  },
+  "risk_threshold": 30,
+  "validation": {
+    "min_grade": 0,
+    "max_grade": 100,
+    "min_attendance": 0,
+    "max_attendance": 100,
+    "min_activity": 0,
+    "max_activity": 100
+  },
+  "output_files": {
+    "rating_file": "student_ratings.csv",
+    "discipline_stats_file": "discipline_stats.csv",
+    "at_risk_file": "at_risk_students.csv"
+  }
+}
